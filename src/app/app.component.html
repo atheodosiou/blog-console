@@ -1,1 +1,6 @@
+<div class="alerts-container" *ngIf="alerts?.length>0">
+    <div class="single-alert" *ngFor="let alert of alerts">
+        <ngb-alert [type]="alert?.type" [dismissible]="true" [animation]="true">{{alert?.message}}</ngb-alert>
+    </div>
+</div>
 <router-outlet></router-outlet>

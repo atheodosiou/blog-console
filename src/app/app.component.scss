@@ -1,0 +1,17 @@
+.alerts-container {
+    z-index: 1000;
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    width: 300px;
+   
+    .single-alert{
+        margin-bottom: 1rem;
+        width: 100%;
+
+        ngb-alert.alert{
+            margin-bottom: 0px !important;
+            border-radius: 4px !important;
+        }
+    }
+}

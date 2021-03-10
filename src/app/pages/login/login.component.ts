@@ -2,6 +2,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
+import { AlertService } from 'src/app/shared/services/alert.service';
 import { AuthService } from 'src/app/shared/services/auth.service';
 
 @Component({
@@ -13,7 +14,7 @@ export class LoginComponent implements OnInit, OnDestroy {
   loginForm: FormGroup;
   loginSubscription: Subscription;
 
-  constructor(private fb: FormBuilder, private authService: AuthService, private router: Router) { }
+  constructor(private fb: FormBuilder, private authService: AuthService, private router: Router, private alertService: AlertService) { }
 
   ngOnInit() {
     this.initLoginForm();
@@ -22,6 +23,10 @@ export class LoginComponent implements OnInit, OnDestroy {
   onSubmit() {
     this.loginSubscription = this.authService.login(this.loginForm.value.email, this.loginForm.value.password).subscribe(res => {
       console.log(res.message);
+      this.alertService.show([
+        { type: 'success', id: "login-alert", message: res.message },
+        { type: 'warning', id: "login-alert", message: res.message }
+      ]);
       this.router.navigateByUrl("/console");
     }, error => {
       console.error(error);

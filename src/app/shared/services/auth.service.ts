@@ -35,7 +35,7 @@ export class AuthService {
   public isLoggedIn(): boolean {
     return !this.jwtHelper.isTokenExpired(this.getToken());
   }
-
+  
   private getToken(): string {
     return localStorage.getItem('X-Access-Token');
   }
