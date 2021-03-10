@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { AuthService } from 'src/app/shared/services/auth.service';
 
 @Component({
   selector: 'app-console',
@@ -7,9 +8,11 @@ import { Component, OnInit } from '@angular/core';
 })
 export class ConsoleComponent implements OnInit {
 
-  constructor() { }
+  loggedIn: boolean = false;
+  constructor(private authService: AuthService) { }
 
   ngOnInit() {
+    this.loggedIn = this.authService.isLoggedIn();
   }
 
 }
