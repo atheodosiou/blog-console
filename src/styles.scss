@@ -6,6 +6,9 @@
 
 html,body{
     height: 100%;
+    background-color: #EEF0F1;
 }
-/* Importing Bootstrap SCSS file. */
-@import '~bootstrap/scss/bootstrap';
+
+.card{
+    border-radius: 5px !important;
+}
