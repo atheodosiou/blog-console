@@ -1,37 +1,74 @@
 import { Injectable } from '@angular/core';
 import { Subject } from 'rxjs';
-
-export class AlertConfig {
-  id: string;
-  message: string;
-  type: 'success' | 'info' | 'warning' | 'danger' | 'primary' | 'secondary' | 'light' | 'dark';
-  animation?: boolean = true;
-  dismissible?: boolean = true;
-}
+import Swal, { SweetAlertOptions } from 'sweetalert2';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AlertService {
-  private _onShow: Subject<AlertConfig[]> = new Subject<AlertConfig[]>();
-  private _onClear: Subject<void> = new Subject<void>();
 
-  constructor() { }
-
-  public get onShow() {
-    return this._onShow;
+  public success(title: string, details?: string, timer?: number, toast?: boolean) {
+    const options: SweetAlertOptions = {
+      titleText: title,
+      text: details,
+      showConfirmButton: false,
+      timer: timer ? timer : undefined,
+      icon: 'success',
+      toast: toast ? toast : false,
+      position: toast && toast === true ? 'top-right' : 'center'
+    };
+    Swal.fire(options);
   }
 
-  public get onHide() {
-    return this._onShow;
+  public info(title: string, details?: string, timer?: number, toast?: boolean) {
+    const options: SweetAlertOptions = {
+      titleText: title,
+      text: details,
+      showConfirmButton: false,
+      timer: timer ? timer : undefined,
+      icon: 'info',
+      toast: toast ? toast : false,
+      position: toast && toast === true ? 'top-right' : 'center'
+    };
+    Swal.fire(options);
   }
 
-  public show(data: AlertConfig[]) {
-    this._onShow.next(data);
+  public warning(title: string, details?: string, timer?: number, toast?: boolean) {
+    const options: SweetAlertOptions = {
+      titleText: title,
+      text: details,
+      showConfirmButton: false,
+      timer: timer ? timer : undefined,
+      icon: 'warning',
+      toast: toast ? toast : false,
+      position: toast && toast === true ? 'top-right' : 'center'
+    };
+    Swal.fire(options);
   }
 
-  public clear() {
-    this._onClear.next();
+  public error(title: string, details?: string, timer?: number, toast?: boolean) {
+    const options: SweetAlertOptions = {
+      titleText: title,
+      text: details,
+      showConfirmButton: false,
+      timer: timer ? timer : undefined,
+      icon: 'error',
+      toast: toast ? toast : false,
+      position: toast && toast === true ? 'top-right' : 'center'
+    };
+    Swal.fire(options);
   }
 
+  public question(title: string, details?: string, timer?: number, toast?: boolean) {
+    const options: SweetAlertOptions = {
+      titleText: title,
+      text: details,
+      showConfirmButton: false,
+      timer: timer ? timer : undefined,
+      icon: 'question',
+      toast: toast ? toast : false,
+      position: toast && toast === true ? 'top-right' : 'center'
+    };
+    Swal.fire(options);
+  }
 }

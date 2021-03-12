@@ -23,13 +23,10 @@ export class LoginComponent implements OnInit, OnDestroy {
   onSubmit() {
     this.loginSubscription = this.authService.login(this.loginForm.value.email, this.loginForm.value.password).subscribe(res => {
       console.log(res.message);
-      this.alertService.show([
-        { type: 'success', id: "login-alert", message: res.message },
-        { type: 'warning', id: "login-alert", message: res.message }
-      ]);
+      this.alertService.success('Loggin was successfull!','', 2000, true);
       this.router.navigateByUrl("/console");
     }, error => {
-      console.error(error);
+      this.alertService.error('Loggin failed!',error.error?.message, 3000, true);
     });
   }
 

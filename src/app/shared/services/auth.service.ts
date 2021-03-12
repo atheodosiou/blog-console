@@ -6,13 +6,14 @@ import { environment } from 'src/environments/environment';
 import { User } from '../models/user.model';
 import * as moment from 'moment';
 import { JwtHelperService } from '@auth0/angular-jwt';
+import { Router } from '@angular/router';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient, private router: Router) { }
   private jwtHelper = new JwtHelperService();
 
   login(email: string, password: string): Observable<{ message: string, user: User }> {
@@ -30,12 +31,13 @@ export class AuthService {
 
   logOut() {
     localStorage.clear();
+    this.router.navigateByUrl("/login");
   }
 
   public isLoggedIn(): boolean {
     return !this.jwtHelper.isTokenExpired(this.getToken());
   }
-  
+
   private getToken(): string {
     return localStorage.getItem('X-Access-Token');
   }
