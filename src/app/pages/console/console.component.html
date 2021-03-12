@@ -1,4 +1,3 @@
-<app-nav-bar></app-nav-bar>
-
-
-<p>Is logged in: {{loggedIn}}</p>
+<app-nav-bar (onNewPostToggle)="showDashboard=$event;"></app-nav-bar>
+<app-dashboard *ngIf="showDashboard"></app-dashboard>
+<app-new-post *ngIf="!showDashboard"></app-new-post>

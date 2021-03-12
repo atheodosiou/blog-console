@@ -1,9 +1,13 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
+import { DashboardComponent } from './components/dashboard/dashboard.component';
 import { NavBarComponent } from './components/nav-bar/nav-bar.component';
+import { NewPostComponent } from './components/new-post/new-post.component';
 
 const appComponents = [
-    NavBarComponent
+    NavBarComponent,
+    NewPostComponent,
+    DashboardComponent
 ];
 
 @NgModule({

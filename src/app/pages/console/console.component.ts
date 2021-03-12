@@ -9,6 +9,7 @@ import { AuthService } from 'src/app/shared/services/auth.service';
 export class ConsoleComponent implements OnInit {
 
   loggedIn: boolean = false;
+  showDashboard: boolean = true;
   constructor(private authService: AuthService) { }
 
   ngOnInit() {

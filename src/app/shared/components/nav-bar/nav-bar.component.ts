@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, EventEmitter, Output } from '@angular/core';
 import { AlertService } from '../../services/alert.service';
 import { AuthService } from '../../services/auth.service';
 
@@ -10,6 +10,9 @@ import { AuthService } from '../../services/auth.service';
 export class NavBarComponent implements OnInit {
 
   constructor(private authService: AuthService, private alertService: AlertService) { }
+  @Output() onNewPostToggle: EventEmitter<boolean> = new EventEmitter<boolean>();
+
+  showDashboard: boolean = true;
 
   ngOnInit() {
   }
