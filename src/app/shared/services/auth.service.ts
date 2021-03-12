@@ -16,6 +16,11 @@ export class AuthService {
   constructor(private http: HttpClient, private router: Router) { }
   private jwtHelper = new JwtHelperService();
 
+  get token() {
+    return this.getToken();
+  }
+
+
   login(email: string, password: string): Observable<{ message: string, user: User }> {
     return this.http.post(`${environment.serverUrl}/auth/login`, { email, password }, { observe: 'response' }).pipe(
       tap((res: HttpResponse<any>) => {
