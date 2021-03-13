@@ -4,7 +4,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+// import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { TokenInterceptor } from './shared/services/tokenInterceptor.service';
 
 @NgModule({
@@ -15,7 +15,7 @@ import { TokenInterceptor } from './shared/services/tokenInterceptor.service';
     BrowserModule,
     AppRoutingModule,
     HttpClientModule,
-    NgbModule
+    // NgbModule
   ],
   bootstrap: [AppComponent],
   providers: [{
