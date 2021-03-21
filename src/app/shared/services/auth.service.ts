@@ -24,6 +24,7 @@ export class AuthService {
   login(email: string, password: string): Observable<{ message: string, user: User }> {
     return this.http.post(`${environment.serverUrl}/auth/login`, { email, password }, { observe: 'response' }).pipe(
       tap((res: HttpResponse<any>) => {
+        console.log("in tap")
         localStorage.setItem('currentUser', JSON.stringify(res.body.user));
         localStorage.setItem('X-Access-Token', res.headers.get('X-Access-Token'));
       }),

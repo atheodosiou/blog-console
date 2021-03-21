@@ -26,6 +26,7 @@ export class LoginComponent implements OnInit, OnDestroy {
       this.alertService.success('Loggin was successfull!','', 2000, true);
       this.router.navigateByUrl("/console");
     }, error => {
+      console.error(error);
       this.alertService.error('Loggin failed!',error.error?.message, 3000, true);
     });
   }

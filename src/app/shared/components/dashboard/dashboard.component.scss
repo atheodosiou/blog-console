@@ -1,0 +1,12 @@
+.dashboard{
+    padding-top: 70px;
+}
+
+.posts-container{
+    height: 710px;
+    overflow-y: auto;
+}
+
+ngb-pagination ::ng-deep ul{
+    margin: 0px !important;
+}
