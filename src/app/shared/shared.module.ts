@@ -5,10 +5,12 @@ import { NavBarComponent } from './components/nav-bar/nav-bar.component';
 import { NewPostComponent } from './components/new-post/new-post.component';
 //NgbModules
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { EditorComponent } from './components/editor/editor.component';
 const appComponents = [
     NavBarComponent,
     NewPostComponent,
-    DashboardComponent
+    DashboardComponent,
+    EditorComponent
 ];
 
 @NgModule({
