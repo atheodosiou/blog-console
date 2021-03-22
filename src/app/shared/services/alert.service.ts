@@ -71,4 +71,17 @@ export class AlertService {
     };
     Swal.fire(options);
   }
+
+  public confirmation(title: string = 'Confrimation needed!', question: string, confirmButtonText: string = 'Ok', cancelButtonText: string = 'Cancel') {
+    return Swal.fire({
+      title: title,
+      text: question,
+      icon: 'warning',
+      showCancelButton: true,
+      cancelButtonColor: '#ff0039',
+      confirmButtonColor: '#2780e3',
+      confirmButtonText: confirmButtonText,
+      cancelButtonText: cancelButtonText
+    })
+  }
 }

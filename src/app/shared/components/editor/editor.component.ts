@@ -15,6 +15,8 @@ import InlineCode from '@editorjs/inline-code';
 import Paragraph from '@editorjs/paragraph';
 import Warning from '@editorjs/warning';
 import Marker from '@editorjs/marker';
+import SimpleImage from '@editorjs/simple-image';
+import { AlertService } from '../../services/alert.service';
 
 @Component({
   selector: 'editor',
@@ -23,9 +25,11 @@ import Marker from '@editorjs/marker';
 })
 export class EditorComponent implements OnInit {
 
-  constructor() { }
+  constructor(private alertService: AlertService) { }
+
   editor: EditorJS;
   editorConfig: EditorConfig = {
+    autofocus: true,
     holder: 'editorjs',
     tools: {
       header: Header,
@@ -49,14 +53,35 @@ export class EditorComponent implements OnInit {
         class: Paragraph,
         inlineToolbar: true,
       },
-      warning: Warning,
+      // warning: Warning,
       Marker: {
         class: Marker,
+      },
+      image: {
+        class: SimpleImage,
+        inlineToolbar: true
       }
     }
   };
 
   ngOnInit() {
     this.editor = new EditorJS(this.editorConfig);
+  }
+
+  saveAsDraft() {
+    this.editor.save().then(outputData => {
+      console.log(outputData);
+    }).catch(error => {
+      console.error(error);
+    })
+  }
+  publish() { }
+
+  clearAll() {
+    this.alertService.confirmation("Clear all", "Do you want to clear all of your content? This actions is not reversible!", "Clear", "Cancel").then(result => {
+      if (result.isConfirmed) {
+        this.editor.clear();
+      }
+    }).catch(error => { console.error(error) })
   }
 }

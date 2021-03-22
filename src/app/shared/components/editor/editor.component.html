@@ -1,1 +1,14 @@
-<div id="editorjs"></div>
+<div class="card">
+    <div class="card-body">
+        <div id="editorjs"></div>
+    </div>
+    <div class="card-footer">
+       <div class="d-flex flex-row align-items-center justify-content-between">
+        <button class="btn btn-danger mr-3" (click)="clearAll()">Clear All</button>
+       <div>
+        <button class="btn btn-primary mr-3" (click)="publish()">Publish</button>
+        <button class="btn btn-secondary" (click)="saveAsDraft()">Save Draft</button>
+       </div>
+       </div>
+    </div>
+</div>
