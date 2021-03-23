@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { ConsoleComponent } from './console.component';
 import { RouterModule } from '@angular/router';
 import { SharedModule } from 'src/app/shared/shared.module';
+import { ReactiveFormsModule } from '@angular/forms';
 
 @NgModule({
   imports: [
@@ -11,7 +12,8 @@ import { SharedModule } from 'src/app/shared/shared.module';
       path: '',
       component: ConsoleComponent
     }]),
-    SharedModule
+    SharedModule,
+    ReactiveFormsModule
   ],
   declarations: [ConsoleComponent],
   exports: [ConsoleComponent]
