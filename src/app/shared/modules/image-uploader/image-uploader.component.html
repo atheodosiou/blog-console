@@ -1,24 +1,30 @@
 <div class="row">
   <div class="col-12">
-    <h3>Upload featured image</h3>
-  </div>
-  <div class="col-12">
-    <img *ngIf="url" [src]="url" height="200" class="mb-2">
-    <div *ngIf="url" class="form-group">
-      <label for="name">Image name</label>
-      <input id="name" type="text" class="form-control" placeholder="Type a name for the image"
-        [(ngModel)]="selectedFile.name">
+    <div class="card">
+      <div class="card-header">
+        <div class="d-flex flex-row align-items-center justify-content-between">
+          <h5 class="m-0">Upload</h5>
+          <div class="d-flex flex-row align-items-center justify-content-end">
+            <input #input id="file-input" type="file" accept="image/*" (change)="selectFile($event)">
+            <button [disabled]="url && !uploading" class="btn btn-secondary btn-sm mr-2" (click)="input.click()">Browse</button>
+            <button [disabled]="!url || uploading" class="btn btn-secondary btn-sm mr-2" (click)="upload()">Upload</button>
+            <button [disabled]="!url || uploading" class="btn btn-secondary btn-sm mr-2" (click)="clear()">Clear</button>
+          </div>
+        </div>
+      </div>
+      <div class="card-body">
+        <div *ngIf="url;else noImage;" class="d-flex flex-row align-items-center justify-content-start">
+          <img class="preview" [src]="url" class="mr-2">
+          <div class="d-flex flex-column align-items-start justify-content-center">
+            <p class="mb-0"><span>File name: </span><span class="text-muted">{{selectedFile?.name}}</span></p>
+            <p class="mb-0"><span>File size: </span> <span class="text-muted">{{selectedFile?.size |toKb}}</span></p>
+          </div>
+        </div>
+      </div>
     </div>
-    <div *ngIf="url" class="form-group">
-      <label for="desc">Short description</label>
-      <textarea id="desc" type="text" class="form-control" placeholder="Type a short description for the image"
-        rows="2"></textarea>
-    </div>
-  </div>
-  <div class="col-12">
-    <input #input id="file-input" type="file" (change)="selectFile($event)">
-    <button *ngIf="!url " class="btn btn-secondary btn-sm mr-2" (click)="input.click()">Browse</button>
-    <button *ngIf="url" class="btn btn-danger btn-sm mr-2" (click)="clear()">Clear</button>
-    <button *ngIf="url" class="btn btn-success btn-sm" (click)="upload()">Upload</button>
   </div>
 </div>
+
+<ng-template #noImage>
+  <h5 class="m-0">Select an image to upload</h5>
+</ng-template>
