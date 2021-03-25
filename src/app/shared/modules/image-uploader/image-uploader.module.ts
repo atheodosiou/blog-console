@@ -6,14 +6,14 @@ import { ImageUploaderComponent } from "./image-uploader.component";
 import { ToKbPipe } from './toKb.pipe';
 
 @NgModule({
-    declarations: [	ImageUploaderComponent,
-      ToKbPipe
-   ],
+    declarations: [ImageUploaderComponent,
+        ToKbPipe
+    ],
     imports: [
         CommonModule,
         FormsModule,
         NgbProgressbarModule
     ],
-    exports: [ImageUploaderComponent]
+    exports: [ImageUploaderComponent, ToKbPipe]
 })
 export class ImageUploaderModule { }

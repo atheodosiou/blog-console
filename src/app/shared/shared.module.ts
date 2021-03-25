@@ -7,6 +7,8 @@ import { NewPostComponent } from './components/new-post/new-post.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { EditorComponent } from './components/editor/editor.component';
 import { ImageUploaderModule } from './modules/image-uploader/image-uploader.module';
+import { FormsModule } from '@angular/forms';
+
 const appComponents = [
     NavBarComponent,
     NewPostComponent,
@@ -19,8 +21,9 @@ const appComponents = [
     imports: [
         CommonModule,
         NgbModule,
-        ImageUploaderModule
+        ImageUploaderModule,
+        FormsModule
     ],
-    exports: [...appComponents, NgbModule]
+    exports: [...appComponents, NgbModule, ImageUploaderModule]
 })
 export class SharedModule { }

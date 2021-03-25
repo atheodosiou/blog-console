@@ -1,21 +1,153 @@
 <div class="row">
     <div class="col-sm-12 col-md-12 col-lg-8 col-xl-8">
-        <div class="card">
-            <div class="card-body">
-                <div id="editorjs"></div>
+        <div class="row">
+            <div class="col-12 mb-2">
+                <input type="text" class="form-control" placeholder="Enter title here">
             </div>
-            <div class="card-footer">
-               <div class="d-flex flex-row align-items-center justify-content-between">
-                <button class="btn btn-danger mr-3" (click)="clearAll()">Clear All</button>
-               <div>
-                <button class="btn btn-primary mr-3" (click)="publish()">Publish</button>
-                <button class="btn btn-secondary" (click)="saveAsDraft()">Save Draft</button>
-               </div>
-               </div>
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-body">
+                        <div id="editorjs"></div>
+                    </div>
+                    <div class="card-footer">
+                        <div class="d-flex flex-row align-items-center justify-content-between">
+                            <button class="btn btn-danger mr-3" (click)="clearAll()">Clear All</button>
+                            <div>
+                                <button class="btn btn-primary mr-3" (click)="publish()">Publish</button>
+                                <button class="btn btn-secondary" (click)="saveAsDraft()">Save Draft</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
-    <div class="col-sm-12 col-md-12 col-lg-4 col-xl-4">
-        <image-uploader></image-uploader>
+    <div class="col-sm-12 col-md-12 col-lg-4 col-xl-4 pl-0">
+        <div class="row">
+            <div class="col-12 mb-2">
+                <image-uploader (onUpload)="onFileUpload($event)"></image-uploader>
+            </div>
+            <div class="col-12 mb-2">
+                <div class="card">
+                    <div class="card-header">
+                        <div class="d-flex flex-row align-items-center justify-content-between">
+                            <h5 class="mb-0">Image gallery</h5>
+                            <button type="button" class="btn btn-secondary btn-sm" (click)="refreshGallery()">
+                                <i class="fas fa-sync"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="card-body" style="max-height: 200px; overflow-y:auto">
+                        <ul *ngIf="mediaFiles?.length>0; else noFiles;" class="list-group">
+                            <li *ngFor="let file of mediaFiles" class="list-group-item">
+                                <div class="d-flex flex-row align-items-center justify-content-start">
+                                    <img class="preview" [src]="file.filePath" class="mr-2"
+                                        (click)="openImage(file.filePath)">
+                                    <div class="d-flex flex-column align-items-start justify-content-center">
+                                        <p class="mb-0"><span>File name: </span><span
+                                                class="text-muted">{{file.fileName}}</span></p>
+                                        <p class="mb-0"><span>File size: </span> <span
+                                                class="text-muted">{{file.fileSize |toKb}}</span></p>
+                                        <button type="button" class="btn btn-secondary btn-sm"
+                                            (click)="copyText(file.filePath)">Copy url</button>
+                                    </div>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12 mb-2">
+                <div class="card">
+                    <div class="card-header">
+                        <div class="d-flex flex-row align-items-center justify-content-between">
+                            <h5 class="mb-0">Featured image link</h5>
+                            <button type="button" class="btn btn-secondary btn-sm"
+                                [disabled]="!featuredImageUrl || featuredImageUrl?.length===0">
+                                Clear
+                            </button>
+                        </div>
+                    </div>
+                    <div class="card-body" style="max-height: 300px; overflow-y:auto">
+                        <input type="url" class="form-control" placeholder="Enter featured image url ..."
+                            [(ngModel)]="featuredImageUrl">
+                    </div>
+                </div>
+            </div>
+            <div class="col-12 mb-2">
+                <div class="card">
+                    <div class="card-header">
+                        <div class="d-flex flex-row align-items-center justify-content-between">
+                            <h5 class="mb-0">Category</h5>
+                            <button type="button" class="btn btn-secondary btn-sm" [disabled]="!selectedCategory"
+                                (click)="selectedCategory=null;">
+                                Clear
+                            </button>
+                        </div>
+                    </div>
+                    <div class="card-body" style="max-height: 300px; overflow-y:auto">
+                        <div class="d-flex flex-row align-items-center justify-content-between">
+                            <div *ngIf="categories?.length>0;else noCategories;" ngbDropdown container="body"
+                                class="d-inline-block">
+                                <button class="btn btn-outline-primary" id="dropdownBasic1" ngbDropdownToggle>
+                                    {{selectedCategory?selectedCategory.category:'Select category'}}
+                                </button>
+                                <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
+                                    <button *ngFor="let category of categories" ngbDropdownItem
+                                        (click)="selectedCategory=category;">
+                                        {{category?.category}}
+                                    </button>
+                                </div>
+                            </div>
+                            <input *ngIf="showCategoryInput" type="text" class="form-control mx-2"
+                                placeholder="Enter category name ..." [(ngModel)]="newCategoryName">
+                            <button *ngIf="showCategoryInput" type="button" class="btn btn-primary mr-2"
+                                (click)="saveCategory()">
+                                <i class="fas fa-save"></i>
+                            </button>
+                            <button type="button" class="btn"
+                                [ngClass]="{'btn-secondary':!showCategoryInput,'btn-danger':showCategoryInput}"
+                                (click)="showCategoryInput=!showCategoryInput;">
+                                <i *ngIf="!showCategoryInput" class="fas fa-plus"></i>
+                                <i *ngIf="showCategoryInput" class="fas fa-times"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12 mb-2">
+                <div class="card">
+                    <div class="card-header">
+                        <div class="d-flex flex-row align-items-center justify-content-between">
+                            <h5 class="mb-0">Tags</h5>
+                            <button type="button" class="btn btn-secondary btn-sm"
+                                [disabled]="!tags || tags?.length===0" (click)="tags=[];">
+                                Clear
+                            </button>
+                        </div>
+                    </div>
+                    <div class="card-body" style="max-height: 300px; overflow-y:auto">
+                        <input type="text" class="form-control mb-2" placeholder="Enter tags ..."
+                            (keyup.enter)="onEnter($event)">
+                        <div *ngIf="tags?.length>0"
+                            class="d-flex flex-row align-items-center justify-content-start flex-wrap">
+                            <div class="mr-1" *ngFor="let tag of tags">
+                                <span class="badge badge-secondary" (click)="removeTag(tag)">
+                                    #{{tag}}
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
+
+<ng-template #noFiles>
+    <p class="m-0">No files yet. Try to upload on first.</p>
+</ng-template>
+
+<ng-template #noCategories>
+    <p *ngIf="!showCategoryInput" class="m-0">There are no categories yet.</p>
+</ng-template>

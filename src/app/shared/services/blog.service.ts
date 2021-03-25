@@ -3,6 +3,8 @@ import { Injectable } from '@angular/core';
 import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
+import { Category } from '../models/category.model';
+import { Media } from '../models/media.model';
 import { AlertService } from './alert.service';
 
 @Injectable({
@@ -22,6 +24,24 @@ export class BlogService {
     );
   }
 
+
+  public getAllImages(): Observable<{ media: Media[] }> {
+    return this.http.get<{ media: Media[] }>(`${environment.serverUrl}/media/images`).pipe(
+      catchError(this.handleError)
+    );
+  }
+
+  public getCategories(): Observable<Category[]> {
+    return this.http.get<Category[]>(`${environment.serverUrl}/categories`).pipe(
+      catchError(this.handleError)
+    );
+  }
+
+  public addCategory(name: string): Observable<Category> {
+    return this.http.post<Category>(`${environment.serverUrl}/categories`, { category: name }).pipe(
+      catchError(this.handleError)
+    );
+  }
 
   private handleError(error: HttpErrorResponse) {
     // Return an observable with a user-facing error message.

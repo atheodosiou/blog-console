@@ -3,7 +3,7 @@
     <div class="card">
       <div class="card-header">
         <div class="d-flex flex-row align-items-center justify-content-between">
-          <h5 class="m-0">Upload</h5>
+          <h5 class="m-0">Image upload</h5>
           <div class="d-flex flex-row align-items-center justify-content-end">
             <input #input id="file-input" type="file" accept="image/*" (change)="selectFile($event)">
             <button [disabled]="url && !uploading" class="btn btn-secondary btn-sm mr-2" (click)="input.click()">Browse</button>

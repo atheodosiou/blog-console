@@ -1,4 +1,18 @@
 ::ng-deep .codex-editor{
-    height: 81vh;
+    height: 77vh;
     overflow-y: auto;
+}
+
+img{
+    width: 100px !important;
+    height: 100px !important;
+    object-fit: cover !important;
+
+    &:hover{
+        cursor: pointer;
+    }
+}
+
+.badge:hover{
+    cursor: pointer;
 }

@@ -1,5 +1,6 @@
 import { HttpClient, HttpEventType } from '@angular/common/http';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter } from '@angular/core';
+import { Media } from '../../models/media.model';
 import { AlertService } from '../../services/alert.service';
 import { UploadService } from '../../services/upload.service';
 
@@ -13,10 +14,10 @@ export class ImageUploaderComponent implements OnInit {
   selectedFile: File = null;
   url: string = null;
   imageName: string;
-  imageDescription: string;
   progress: number = 0;
   uploading: boolean = false;
-  fileExtentionRegex = /\.(gif|jpe?g|tiff?|png|webp|bmp)$/i;
+
+  @Output() onUpload: EventEmitter<Media> = new EventEmitter<Media>();
 
   constructor(private uploadservice: UploadService, private alertService: AlertService) { }
 
@@ -38,6 +39,7 @@ export class ImageUploaderComponent implements OnInit {
     this.url = null;
     this.selectedFile = null;
   }
+
   upload() {
     if (this.selectedFile) {
       const formData: FormData = new FormData();
@@ -48,7 +50,7 @@ export class ImageUploaderComponent implements OnInit {
         if (event.type === HttpEventType.UploadProgress) {
           this.progress = Math.round(event.loaded * 100 / event.total);
         } else if (event.type === HttpEventType.Response) {
-          console.log(event);
+          this.onUpload.emit(event.body);
           this.uploading = false;
           this.alertService.success('Image uploaded.', '', 2000, true);
           this.url = null;
