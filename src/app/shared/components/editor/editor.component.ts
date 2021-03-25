@@ -13,6 +13,7 @@ import Delimiter from '@editorjs/delimiter';
 import Table from '@editorjs/table';
 import InlineCode from '@editorjs/inline-code';
 import Paragraph from '@editorjs/paragraph';
+import ImageTool from '@editorjs/image';
 import Warning from '@editorjs/warning';
 import Marker from '@editorjs/marker';
 import SimpleImage from '@editorjs/simple-image';
@@ -20,6 +21,8 @@ import { AlertService } from '../../services/alert.service';
 import { Media } from '../../models/media.model';
 import { BlogService } from '../../services/blog.service';
 import { Category } from '../../models/category.model';
+import { environment } from 'src/environments/environment';
+import { Post } from '../../models/post.model';
 
 @Component({
   selector: 'editor',
@@ -29,12 +32,14 @@ import { Category } from '../../models/category.model';
 export class EditorComponent implements OnInit {
 
   constructor(private alertService: AlertService, private blogService: BlogService) { }
+  title: string;
   mediaFiles: Media[] = [];
   featuredImageUrl: string;
   tags: string[] = [];
   categories: Category[] = [];
   selectedCategory: Category;
   newCategoryName: string;
+  status: 'published' | 'draft' = 'draft';
 
   showCategoryInput: boolean = false;
 
@@ -68,10 +73,7 @@ export class EditorComponent implements OnInit {
       Marker: {
         class: Marker,
       },
-      image: {
-        class: SimpleImage,
-        inlineToolbar: true
-      }
+      image: SimpleImage
     }
   };
 
@@ -94,14 +96,33 @@ export class EditorComponent implements OnInit {
     });
   }
 
-  saveAsDraft() {
-    this.editor.save().then(outputData => {
-      console.log(outputData);
-    }).catch(error => {
-      console.error(error);
-    })
+  async saveAsDraft() {
+    this.status = 'draft';
+    const post: Post = {
+      title: this.title,
+      preview: '',
+      content: await this.editor.save(),
+      imageUrl: this.featuredImageUrl,
+      status: this.status,
+      tags: this.tags,
+      category: this.selectedCategory
+    };
+    console.log(post);
   }
-  publish() { }
+
+  async publish() {
+    this.status = 'published';
+    const post: Post = {
+      title: this.title,
+      preview: '',
+      content: await this.editor.save(),
+      imageUrl: this.featuredImageUrl,
+      status: this.status,
+      tags: this.tags,
+      category: this.selectedCategory
+    };
+    console.log(post);
+  }
 
   clearAll() {
     this.alertService.confirmation("Clear all", "Do you want to clear all of your content? This actions is not reversible!", "Clear", "Cancel").then(result => {
@@ -157,12 +178,27 @@ export class EditorComponent implements OnInit {
       this.blogService.addCategory(this.newCategoryName).subscribe(res => {
         this.categories.push(res);
         this.alertService.success("Category created successfully.", "", 2000, true);
-        this.newCategoryName=null;
+        this.newCategoryName = null;
         this.showCategoryInput = false;
       }, error => {
         this.alertService.error("Category was not created successfully", "", 3000, true);
         console.log(error);
       });
+    }
+  }
+
+  removeImage(file: Media) {
+    if (file?._id) {
+      this.blogService.removeImageFile(file?._id).subscribe(res => {
+        const index = this.mediaFiles.indexOf(file);
+        if (index !== -1) {
+          this.mediaFiles.splice(index, 1);
+          this.alertService.success("Image removed successfully", "", 2000, true);
+        }
+      }, error => {
+        this.alertService.error("Image could no be removed successfully", "", 3000, true);
+        console.log(error);
+      })
     }
   }
 

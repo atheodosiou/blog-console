@@ -43,6 +43,12 @@ export class BlogService {
     );
   }
 
+  public removeImageFile(id: string): Observable<any> {
+    return this.http.delete<any>(`${environment.serverUrl}/media/images/${id}`).pipe(
+      catchError(this.handleError)
+    );
+  }
+
   private handleError(error: HttpErrorResponse) {
     // Return an observable with a user-facing error message.
     return throwError(error);
