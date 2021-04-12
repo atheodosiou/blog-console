@@ -5,6 +5,7 @@ import { catchError } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
 import { Category } from '../models/category.model';
 import { Media } from '../models/media.model';
+import { Post } from '../models/post.model';
 import { AlertService } from './alert.service';
 
 @Injectable({
@@ -24,6 +25,11 @@ export class BlogService {
     );
   }
 
+  public addPost(data: Post): Observable<any> {
+    return this.http.post<Post>(`${environment.serverUrl}/posts`, data).pipe(
+      catchError(this.handleError)
+    );
+  }
 
   public getAllImages(): Observable<{ media: Media[] }> {
     return this.http.get<{ media: Media[] }>(`${environment.serverUrl}/media/images`).pipe(

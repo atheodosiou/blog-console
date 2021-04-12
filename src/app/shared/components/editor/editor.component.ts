@@ -23,6 +23,7 @@ import { BlogService } from '../../services/blog.service';
 import { Category } from '../../models/category.model';
 import { environment } from 'src/environments/environment';
 import { Post } from '../../models/post.model';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'editor',
@@ -31,8 +32,9 @@ import { Post } from '../../models/post.model';
 })
 export class EditorComponent implements OnInit {
 
-  constructor(private alertService: AlertService, private blogService: BlogService) { }
+  constructor(private alertService: AlertService, private blogService: BlogService, private router: Router) { }
   title: string;
+  preview: string;
   mediaFiles: Media[] = [];
   featuredImageUrl: string;
   tags: string[] = [];
@@ -97,31 +99,26 @@ export class EditorComponent implements OnInit {
   }
 
   async saveAsDraft() {
-    this.status = 'draft';
-    const post: Post = {
-      title: this.title,
-      preview: '',
-      content: await this.editor.save(),
-      imageUrl: this.featuredImageUrl,
-      status: this.status,
-      tags: this.tags,
-      category: this.selectedCategory
-    };
-    console.log(post);
+    if (await (await this.checkRequiredFields()).ok) {
+      this.status = 'draft';
+      const post = await this.createReqeustBody();
+      console.log(post);
+    }
   }
 
   async publish() {
-    this.status = 'published';
-    const post: Post = {
-      title: this.title,
-      preview: '',
-      content: await this.editor.save(),
-      imageUrl: this.featuredImageUrl,
-      status: this.status,
-      tags: this.tags,
-      category: this.selectedCategory
-    };
-    console.log(post);
+    if (await (await this.checkRequiredFields()).ok) {
+      this.status = 'published';
+      const post = await this.createReqeustBody();
+      this.blogService.addPost(post).subscribe(res => {
+        console.log("Post added!", res);
+        this.alertService.success("New article published successfully.", "", 2000, true);
+        this.router.navigateByUrl('')
+      }, error => {
+        this.alertService.error("Faild to publish new article.", "", 3000, true);
+        console.log(error);
+      });
+    }
   }
 
   clearAll() {
@@ -210,5 +207,39 @@ export class EditorComponent implements OnInit {
         reject(error);
       })
     });
+  }
+
+  /**
+   * Returns true if required fields are ok,
+   * false otherwise
+   */
+  private async checkRequiredFields(): Promise<{ ok: boolean, errors: { field: string, error: string }[] }> {
+    const result: { ok: boolean, errors: { field: string, error: string }[] } = { ok: true, errors: [] };
+    if (!this.title || this.title === '') {
+      result.errors.push({ field: 'title', error: 'Title is required.' });
+    }
+    if (!this.preview || this.title === '') {
+      result.errors.push({ field: 'preview', error: 'Description is required.' });
+    }
+    const editorValue = await this.editor.save();
+    if (!editorValue || editorValue.blocks.length === 0) {
+      result.errors.push({ field: 'body', error: 'Body is required.' });
+    }
+    if (result.errors.length > 0) {
+      result.ok = false;
+    }
+    return result;
+  }
+
+  private async createReqeustBody(): Promise<Post> {
+    return {
+      title: this.title,
+      preview: this.preview,
+      content: await this.editor.save(),
+      imageUrl: this.featuredImageUrl,
+      status: this.status,
+      tags: this.tags,
+      category: this.selectedCategory
+    };
   }
 }
