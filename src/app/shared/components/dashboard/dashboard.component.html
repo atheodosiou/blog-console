@@ -92,8 +92,6 @@
           <div class="card-body">
             <div class="row d-flex align-items-center">
               <div class="col-sm-12 col-md-10 col-lg-10 col-xl-10">
-                <!-- <div class="d-flex flex-row align-items-start justify-content-start h-100 w-100">
-                  <img [src]="post?.imageUrl" width="100" height="100"> -->
                 <div class="content d-flex flex-column align-items-start justify-content-start pl-2">
                   <h3 class="m-0">{{post?.title}}</h3>
                   <h4 class="m-0 text-muted">{{post?.preview}}</h4>
@@ -106,7 +104,6 @@
                     </div>
                   </div>
                 </div>
-                <!-- </div> -->
               </div>
               <div class="col-sm-12 col-md-1 col-lg-1 col-xl-1 d-flex justify-content-center">
                 <div>
@@ -117,9 +114,8 @@
                 </div>
               </div>
               <div class="col-sm-12 col-md-1 col-lg-1 col-xl-1 d-flex justify-content-center">
-                <div class="text-muted">
-                  <i class="fas fa-ellipsis-h"></i>
-                </div>
+                <i class="far fa-edit mr-3 action action-edit" (click)="editPost(post);"></i>
+                <i class="far fa-trash-alt action action-delete" (click)="deletePost(post)"></i>
               </div>
             </div>
           </div>

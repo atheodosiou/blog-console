@@ -1,5 +1,5 @@
-import { Component, OnInit } from '@angular/core';
-import EditorJS, { EditorConfig } from '@editorjs/editorjs';
+import { Component, Input, OnInit, AfterViewInit } from '@angular/core';
+import EditorJS, { EditorConfig, OutputData } from '@editorjs/editorjs';
 import Header from '@editorjs/header';
 import Link from '@editorjs/link';
 import Raw from '@editorjs/raw';
@@ -21,7 +21,6 @@ import { AlertService } from '../../services/alert.service';
 import { Media } from '../../models/media.model';
 import { BlogService, GoToEnum } from '../../services/blog.service';
 import { Category } from '../../models/category.model';
-import { environment } from 'src/environments/environment';
 import { Post } from '../../models/post.model';
 import { Router } from '@angular/router';
 
@@ -30,8 +29,11 @@ import { Router } from '@angular/router';
   templateUrl: './editor.component.html',
   styleUrls: ['./editor.component.scss']
 })
-export class EditorComponent implements OnInit {
+export class EditorComponent implements OnInit, AfterViewInit {
 
+  @Input() set post(value: Post) {
+    this.incomingPost = value;
+  }
   constructor(private alertService: AlertService, private blogService: BlogService, private router: Router) { }
   title: string;
   preview: string;
@@ -42,7 +44,7 @@ export class EditorComponent implements OnInit {
   selectedCategory: Category;
   newCategoryName: string;
   status: 'published' | 'draft' = 'draft';
-
+  incomingPost: Post;
   showCategoryInput: boolean = false;
 
   editor: EditorJS;
@@ -86,11 +88,20 @@ export class EditorComponent implements OnInit {
     body: false
   };
 
-  ngOnInit() {
+  ngAfterViewInit() {
+    if (this.incomingPost?.content) {
+      this.editorConfig.data = this.incomingPost.content;
+      this.title = this.incomingPost.title;
+      this.preview = this.incomingPost.preview;
+      this.featuredImageUrl = this.incomingPost.imageUrl;
+      this.selectedCategory = this.incomingPost.category;
+      this.tags = this.incomingPost.tags;
+    }
     this.editor = new EditorJS(this.editorConfig);
-    // this.editor.isReady.then(()=>{
-    //   console.log('Editor is ready!!!!!!!!!!!!!!!!!!!')
-    // });
+  }
+
+  ngOnInit() {
+
     this.getImageGallery().then(res => {
       if (this.mediaFiles) {
         this.mediaFiles = [];

@@ -1,6 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { Post } from '../../models/post.model';
 import { AlertService } from '../../services/alert.service';
-import { BlogService } from '../../services/blog.service';
+import { BlogService, GoToEnum } from '../../services/blog.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -14,6 +15,8 @@ export class DashboardComponent implements OnInit {
   page: number = 1;
   pageSize: number = 5;
   filter: 'published' | 'draft' = 'published';
+
+  @Output() onEdit: EventEmitter<Post> = new EventEmitter<Post>();
 
   ngOnInit() {
     this.blogService.getPostsPaginaged({ limit: this.pageSize, offset: 0, status: this.filter }).subscribe(res => {
@@ -37,9 +40,19 @@ export class DashboardComponent implements OnInit {
     this.getPosts(this.pageSize, (this.page * this.pageSize) - this.pageSize, this.filter);
   }
 
+  editPost(post: Post) {
+    this.onEdit.emit(post);
+    this.blogService.goToPosts$.next(GoToEnum.NEW_POST);
+  }
+
+  deletePost(post: Post) {
+
+  }
+
   private getPosts(limit: number, offset: number, status: 'published' | 'draft') {
     this.blogService.getPostsPaginaged({ limit: limit, offset: offset, status: status }).subscribe(res => {
       this.data = res;
+      console.log(this.data);
     }, err => {
       this.alertService.error("Somthing happend", err?.error?.message, 3000, true);
       console.log(err?.error);

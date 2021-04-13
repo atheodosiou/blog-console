@@ -1,6 +1,7 @@
 import { Component, OnInit, EventEmitter, Output } from '@angular/core';
 import { AlertService } from '../../services/alert.service';
 import { AuthService } from '../../services/auth.service';
+import { BlogService, GoToEnum } from '../../services/blog.service';
 
 @Component({
   selector: 'app-nav-bar',
@@ -9,12 +10,19 @@ import { AuthService } from '../../services/auth.service';
 })
 export class NavBarComponent implements OnInit {
 
-  constructor(private authService: AuthService, private alertService: AlertService) { }
+  constructor(private authService: AuthService, private alertService: AlertService, private blogService: BlogService) { }
   @Output() onNewPostToggle: EventEmitter<boolean> = new EventEmitter<boolean>();
 
   showDashboard: boolean = true;
 
   ngOnInit() {
+    this.blogService.goToPosts$.subscribe(res => {
+      if (res === GoToEnum.DASHBOARD) {
+        this.showDashboard = true;
+      } else {
+        this.showDashboard = false;
+      }
+    })
   }
 
   signOut() {

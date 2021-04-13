@@ -1,3 +1,3 @@
 <app-nav-bar (onNewPostToggle)="showDashboard=$event;"></app-nav-bar>
-<app-dashboard *ngIf="showDashboard"></app-dashboard>
-<app-new-post *ngIf="!showDashboard"></app-new-post>
+<app-dashboard *ngIf="showDashboard" (onEdit)="selectedPost=$event;"></app-dashboard>
+<app-new-post *ngIf="!showDashboard" [post]="selectedPost"></app-new-post>

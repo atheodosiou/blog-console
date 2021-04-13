@@ -1,3 +1,5 @@
+@import '../../../../assets/scss/variables';
+
 .dashboard{
     padding-top: 70px;
 }
@@ -9,4 +11,14 @@
 
 ngb-pagination ::ng-deep ul{
     margin: 0px !important;
+}
+
+.action-edit:hover{
+    color: $success;
+    cursor: pointer;
+}
+
+.action-delete:hover{
+    color: $danger ;
+    cursor: pointer;
 }

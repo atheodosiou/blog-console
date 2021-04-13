@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
+import { Post } from '../../models/post.model';
 
 @Component({
   selector: 'app-new-post',
@@ -8,6 +9,7 @@ import { Component, OnInit } from '@angular/core';
 export class NewPostComponent implements OnInit {
 
   constructor() { }
+  @Input() post: Post;
 
   ngOnInit() {
   }
