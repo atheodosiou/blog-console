@@ -2,11 +2,14 @@
     <div class="col-sm-12 col-md-12 col-lg-8 col-xl-8">
         <div class="row">
             <div class="col-12 mb-2">
-                <input type="text" class="form-control" placeholder="Enter title here" [(ngModel)]="title">
+                <input type="text" class="form-control {{invalidFields.title?'invalid':''}}"
+                    placeholder="Enter title here" [(ngModel)]="title"
+                    (input)="title!==''?invalidFields.title=false:invalidFields.title=true;">
             </div>
             <div class="col-12 mb-2">
-                <input type="text" class="form-control" placeholder="Short description of blog post"
-                    [(ngModel)]="preview">
+                <input type="text" class="form-control {{invalidFields.preview?'invalid':''}}"
+                    placeholder="Short description of blog post" [(ngModel)]="preview"
+                    (input)="preview!==''?invalidFields.preview=false:invalidFields.preview=true;">
             </div>
             <div class="col-12">
                 <div class="card">

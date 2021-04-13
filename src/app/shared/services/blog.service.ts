@@ -1,6 +1,6 @@
 import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable, throwError } from 'rxjs';
+import { Observable, Subject, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
 import { Category } from '../models/category.model';
@@ -8,12 +8,23 @@ import { Media } from '../models/media.model';
 import { Post } from '../models/post.model';
 import { AlertService } from './alert.service';
 
+export enum GoToEnum {
+  DASHBOARD = 'dashboard',
+  NEW_POST = 'new_post'
+}
+
 @Injectable({
   providedIn: 'root'
 })
 export class BlogService {
 
   constructor(private http: HttpClient, private alertService: AlertService) { }
+
+  private goToPosts: Subject<GoToEnum> = new Subject<GoToEnum>();
+
+  public get goToPosts$() {
+    return this.goToPosts;
+  }
 
   public getPostsPaginaged(pagination: { limit: number, offset: number, status: 'published' | 'draft' }): Observable<any> {
     return this.http.post<any>(`${environment.serverUrl}/posts/paginated`, pagination, {

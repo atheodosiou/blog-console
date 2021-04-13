@@ -16,3 +16,8 @@ img{
 .badge:hover{
     cursor: pointer;
 }
+
+input:focus{
+    border-color: lightgray;
+    box-shadow: none;
+}

@@ -19,7 +19,7 @@ import Marker from '@editorjs/marker';
 import SimpleImage from '@editorjs/simple-image';
 import { AlertService } from '../../services/alert.service';
 import { Media } from '../../models/media.model';
-import { BlogService } from '../../services/blog.service';
+import { BlogService, GoToEnum } from '../../services/blog.service';
 import { Category } from '../../models/category.model';
 import { environment } from 'src/environments/environment';
 import { Post } from '../../models/post.model';
@@ -49,6 +49,7 @@ export class EditorComponent implements OnInit {
   editorConfig: EditorConfig = {
     autofocus: true,
     holder: 'editorjs',
+    placeholder: 'Let`s write an awesome story!',
     tools: {
       header: Header,
       link: Link,
@@ -76,11 +77,20 @@ export class EditorComponent implements OnInit {
         class: Marker,
       },
       image: SimpleImage
-    }
+    },
+  };
+
+  invalidFields = {
+    title: false,
+    preview: false,
+    body: false
   };
 
   ngOnInit() {
     this.editor = new EditorJS(this.editorConfig);
+    // this.editor.isReady.then(()=>{
+    //   console.log('Editor is ready!!!!!!!!!!!!!!!!!!!')
+    // });
     this.getImageGallery().then(res => {
       if (this.mediaFiles) {
         this.mediaFiles = [];
@@ -102,7 +112,15 @@ export class EditorComponent implements OnInit {
     if (await (await this.checkRequiredFields()).ok) {
       this.status = 'draft';
       const post = await this.createReqeustBody();
-      console.log(post);
+      this.blogService.addPost(post).subscribe(res => {
+        console.log("Post saved!", res);
+        this.alertService.success("Draft saved successfully.", "", 2000, true);
+      }, error => {
+        this.alertService.error("Failed to save draft.", "", 3000, true);
+        console.log(error);
+      });
+    } else {
+      this.alertService.error("Please check all required fields.", "", 3000, true);
     }
   }
 
@@ -113,11 +131,13 @@ export class EditorComponent implements OnInit {
       this.blogService.addPost(post).subscribe(res => {
         console.log("Post added!", res);
         this.alertService.success("New article published successfully.", "", 2000, true);
-        this.router.navigateByUrl('')
+        this.blogService.goToPosts$.next(GoToEnum.DASHBOARD);
       }, error => {
         this.alertService.error("Faild to publish new article.", "", 3000, true);
         console.log(error);
       });
+    } else {
+      this.alertService.error("Please check all required fields.", "", 3000, true);
     }
   }
 
@@ -217,13 +237,16 @@ export class EditorComponent implements OnInit {
     const result: { ok: boolean, errors: { field: string, error: string }[] } = { ok: true, errors: [] };
     if (!this.title || this.title === '') {
       result.errors.push({ field: 'title', error: 'Title is required.' });
+      this.invalidFields.title = true;
     }
     if (!this.preview || this.title === '') {
       result.errors.push({ field: 'preview', error: 'Description is required.' });
+      this.invalidFields.preview = true;
     }
     const editorValue = await this.editor.save();
     if (!editorValue || editorValue.blocks.length === 0) {
       result.errors.push({ field: 'body', error: 'Body is required.' });
+      this.invalidFields.body = true;
     }
     if (result.errors.length > 0) {
       result.ok = false;
