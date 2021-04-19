@@ -26,7 +26,7 @@ export class BlogService {
     return this.goToPosts;
   }
 
-  public getPostsPaginaged(pagination: { limit: number, offset: number, status: 'published' | 'draft' }): Observable<any> {
+  public getPostsPaginaged(pagination: { limit: number, offset: number, status?: 'all' | 'published' | 'draft' }): Observable<any> {
     return this.http.post<any>(`${environment.serverUrl}/posts/paginated`, pagination, {
       headers: new HttpHeaders({
         'xapikey': environment.apiKey
@@ -38,6 +38,18 @@ export class BlogService {
 
   public addPost(data: Post): Observable<any> {
     return this.http.post<Post>(`${environment.serverUrl}/posts`, data).pipe(
+      catchError(this.handleError)
+    );
+  }
+
+  public updatePost(data: Post): Observable<any> {
+    return this.http.patch<Post>(`${environment.serverUrl}/posts/${data._id}`, data).pipe(
+      catchError(this.handleError)
+    );
+  }
+
+  public deletePost(postId: string): Observable<any> {
+    return this.http.delete<any>(`${environment.serverUrl}/posts/${postId}`).pipe(
       catchError(this.handleError)
     );
   }

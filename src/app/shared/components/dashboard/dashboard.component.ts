@@ -14,7 +14,7 @@ export class DashboardComponent implements OnInit {
   data: { limit: number, offset: number, total: number, posts: any[] };
   page: number = 1;
   pageSize: number = 5;
-  filter: 'published' | 'draft' = 'published';
+  filter: 'all' | 'published' | 'draft' = 'all';
 
   @Output() onEdit: EventEmitter<Post> = new EventEmitter<Post>();
 
@@ -35,7 +35,7 @@ export class DashboardComponent implements OnInit {
     }
   }
 
-  onFilterChange(filter: 'published' | 'draft') {
+  onFilterChange(filter: 'all' | 'published' | 'draft') {
     this.filter = filter;
     this.getPosts(this.pageSize, (this.page * this.pageSize) - this.pageSize, this.filter);
   }
@@ -46,10 +46,20 @@ export class DashboardComponent implements OnInit {
   }
 
   deletePost(post: Post) {
-
+    this.blogService.deletePost(post._id).subscribe(res => {
+      const index = this.data.posts.indexOf(post)
+      if (index > -1) {
+        this.data.posts.splice(index, 1);
+        this.data.total -= 1;
+        this.alertService.success("Post deleted successfully.", "", 2000, true);
+      }
+    }, error => {
+      this.alertService.error("Faild to delete post.", "", 3000, true);
+      console.log(error);
+    });
   }
 
-  private getPosts(limit: number, offset: number, status: 'published' | 'draft') {
+  private getPosts(limit: number, offset: number, status: 'all' | 'published' | 'draft') {
     this.blogService.getPostsPaginaged({ limit: limit, offset: offset, status: status }).subscribe(res => {
       this.data = res;
       console.log(this.data);

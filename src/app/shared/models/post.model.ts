@@ -1,4 +1,5 @@
 export class Post {
+    _id?: string;
     title: string;
     preview: string;
     postDate?: string;
@@ -11,10 +12,13 @@ export class Post {
     shares?: number
     category?: any;
     tags?: string[];
+    __v?: number;
 }
 
 export class Comment {
+    _id?: string;
     by: string;
     on: Date;
     comment: string;
+    __v?: number;
 }

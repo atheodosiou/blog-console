@@ -71,9 +71,10 @@
             <ngb-pagination *ngIf="data?.total>pageSize" [collectionSize]="data?.total" [pageSize]="pageSize"
               [directionLinks]="false" (pageChange)="onPageChange($event)"></ngb-pagination>
             <div ngbDropdown class="d-inline-block">
-              <button class="btn btn-outline-primary" id="dropdownBasic1" ngbDropdownToggle>{{!filter?'Filter
-                Posts':filter==='published'?'Published':'Draft'}}</button>
+              <button class="btn btn-outline-primary" id="dropdownBasic1" ngbDropdownToggle>
+                {{!filter?'Filter Posts':filter==='published'?'Published':filter==='all'?'All':'Draft'}}</button>
               <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
+                <button ngbDropdownItem (click)="onFilterChange('all')">All</button>
                 <button ngbDropdownItem (click)="onFilterChange('published')">Published</button>
                 <button ngbDropdownItem (click)="onFilterChange('draft')">Draft</button>
               </div>

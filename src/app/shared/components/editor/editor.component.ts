@@ -122,14 +122,30 @@ export class EditorComponent implements OnInit, AfterViewInit {
   async saveAsDraft() {
     if (await (await this.checkRequiredFields()).ok) {
       this.status = 'draft';
-      const post = await this.createReqeustBody();
-      this.blogService.addPost(post).subscribe(res => {
-        console.log("Post saved!", res);
-        this.alertService.success("Draft saved successfully.", "", 2000, true);
-      }, error => {
-        this.alertService.error("Failed to save draft.", "", 3000, true);
-        console.log(error);
-      });
+      if (this.incomingPost) {
+        const post = await this.createReqeustBody(this.incomingPost);
+        this.blogService.updatePost(post).subscribe(res => {
+          this.alertService.success("Draft updated successfully.", "", 2000, true);
+        }, error => {
+          this.alertService.error("Failed to update draft.",
+            error?.details ||
+            error?.error?.errors?.reduce((acc, current) => {
+              return acc + current + '\n';
+            }), 3000, true);
+        });
+      } else {
+        console.log('Is new');
+        const post = await this.createReqeustBody();
+        this.blogService.addPost(post).subscribe(res => {
+          this.alertService.success("Draft saved successfully.", "", 2000, true);
+        }, error => {
+          this.alertService.error("Failed to save draft.",
+            error?.details ||
+            error?.error?.errors?.reduce((acc, current) => {
+              return acc + current + '\n';
+            }), 3000, true);
+        });
+      }
     } else {
       this.alertService.error("Please check all required fields.", "", 3000, true);
     }
@@ -138,15 +154,29 @@ export class EditorComponent implements OnInit, AfterViewInit {
   async publish() {
     if (await (await this.checkRequiredFields()).ok) {
       this.status = 'published';
-      const post = await this.createReqeustBody();
-      this.blogService.addPost(post).subscribe(res => {
-        console.log("Post added!", res);
-        this.alertService.success("New article published successfully.", "", 2000, true);
-        this.blogService.goToPosts$.next(GoToEnum.DASHBOARD);
-      }, error => {
-        this.alertService.error("Faild to publish new article.", "", 3000, true);
-        console.log(error);
-      });
+      if (this.incomingPost) {
+        const post = await this.createReqeustBody(this.incomingPost);
+        this.blogService.updatePost(post).subscribe(res => {
+          this.alertService.success("Post updated successfully.", "", 2000, true);
+        }, error => {
+          this.alertService.error("Failed to update draft.",
+            error?.details ||
+            error?.error?.errors?.reduce((acc, current) => {
+              return acc + current + '\n';
+            }), 3000, true);
+        });
+      } else {
+        const post = await this.createReqeustBody();
+        this.blogService.addPost(post).subscribe(res => {
+          this.alertService.success("Post published successfully.", "", 2000, true);
+        }, error => {
+          this.alertService.error("Failed to publish new post.",
+            error?.details ||
+            error?.error?.errors?.reduce((acc, current) => {
+              return acc + current + '\n';
+            }), 3000, true);
+        });
+      }
     } else {
       this.alertService.error("Please check all required fields.", "", 3000, true);
     }
@@ -265,7 +295,18 @@ export class EditorComponent implements OnInit, AfterViewInit {
     return result;
   }
 
-  private async createReqeustBody(): Promise<Post> {
+  private async createReqeustBody(existing?: Post): Promise<Post> {
+    if (existing) {
+      existing.title = this.title;
+      existing.preview = this.preview;
+      existing.content = await this.editor.save();
+      existing.imageUrl = this.featuredImageUrl;
+      existing.status = this.status;
+      existing.tags = this.tags;
+      existing.category = this.selectedCategory;
+
+      return existing;
+    }
     return {
       title: this.title,
       preview: this.preview,
