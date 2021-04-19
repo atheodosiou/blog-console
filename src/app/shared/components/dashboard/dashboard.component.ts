@@ -1,7 +1,7 @@
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { Post } from '../../models/post.model';
 import { AlertService } from '../../services/alert.service';
-import { BlogService, GoToEnum } from '../../services/blog.service';
+import { BlogService, GoToEnum, PostStats } from '../../services/blog.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -15,10 +15,17 @@ export class DashboardComponent implements OnInit {
   page: number = 1;
   pageSize: number = 5;
   filter: 'all' | 'published' | 'draft' = 'all';
+  statistics: PostStats;
 
   @Output() onEdit: EventEmitter<Post> = new EventEmitter<Post>();
 
   ngOnInit() {
+    this.blogService.getPostStatistics().subscribe(res => {
+      this.statistics = res;
+    }, error => {
+      this.alertService.error("Faild to fetch post statistics.", error?.error?.message, 3000, true);
+      console.log(error?.error);
+    });
     this.blogService.getPostsPaginaged({ limit: this.pageSize, offset: 0, status: this.filter }).subscribe(res => {
       console.log(res)
       this.data = res;

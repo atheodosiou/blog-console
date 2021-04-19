@@ -4,7 +4,7 @@
       <div class="card shadow-sm">
         <div class="card-body">
           <div class="d-flex flex-column align-items-center justify-content-start">
-            <h3 class="m-0 font-weight-bold">32</h3>
+            <h3 class="m-0 font-weight-bold">{{statistics.totalPublished}}</h3>
             <p class="m-0 text-muted">Total published posts</p>
           </div>
         </div>
@@ -14,7 +14,7 @@
       <div class="card shadow-sm">
         <div class="card-body">
           <div class="d-flex flex-column align-items-center justify-content-start">
-            <h3 class="m-0 font-weight-bold">0</h3>
+            <h3 class="m-0 font-weight-bold">{{statistics.totalDraft}}</h3>
             <p class="m-0 text-muted">Total draft posts</p>
           </div>
         </div>
@@ -24,7 +24,7 @@
       <div class="card shadow-sm">
         <div class="card-body">
           <div class="d-flex flex-column align-items-center justify-content-start">
-            <h3 class="m-0 font-weight-bold">32</h3>
+            <h3 class="m-0 font-weight-bold">{{statistics.totalViews}}</h3>
             <p class="m-0 text-muted">Total post views</p>
           </div>
         </div>
@@ -34,7 +34,7 @@
       <div class="card shadow-sm">
         <div class="card-body">
           <div class="d-flex flex-column align-items-center justify-content-start">
-            <h3 class="m-0 font-weight-bold">32</h3>
+            <h3 class="m-0 font-weight-bold">{{statistics.totalLikes}}</h3>
             <p class="m-0 text-muted">Total post likes</p>
           </div>
         </div>
@@ -44,7 +44,7 @@
       <div class="card shadow-sm">
         <div class="card-body">
           <div class="d-flex flex-column align-items-center justify-content-start">
-            <h3 class="m-0 font-weight-bold">27</h3>
+            <h3 class="m-0 font-weight-bold">{{statistics.totalComments}}</h3>
             <p class="m-0 text-muted">Total post comments</p>
           </div>
         </div>
@@ -54,7 +54,7 @@
       <div class="card shadow-sm">
         <div class="card-body">
           <div class="d-flex flex-column align-items-center justify-content-start">
-            <h3 class="m-0 font-weight-bold">10</h3>
+            <h3 class="m-0 font-weight-bold">{{statistics.totalShares}}</h3>
             <p class="m-0 text-muted">Total post shares</p>
           </div>
         </div>
@@ -66,8 +66,7 @@
       <div class="card shadow-sm">
         <div class="card-body">
           <div class="d-flex flex-row align-items-center justify-content-between">
-            <h3 class="font-weight-bold m-0">Blog posts <span *ngIf="data?.total"
-                class="text-muted font-weight-normal">({{data.total}})</span></h3>
+            <h3 class="font-weight-bold m-0">Blog posts</h3>
             <ngb-pagination *ngIf="data?.total>pageSize" [collectionSize]="data?.total" [pageSize]="pageSize"
               [directionLinks]="false" (pageChange)="onPageChange($event)"></ngb-pagination>
             <div ngbDropdown class="d-inline-block">

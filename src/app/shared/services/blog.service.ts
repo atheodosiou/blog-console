@@ -12,6 +12,14 @@ export enum GoToEnum {
   DASHBOARD = 'dashboard',
   NEW_POST = 'new_post'
 }
+export class PostStats {
+  totalPublished: number;
+  totalDraft: number;
+  totalViews: number;
+  totalLikes: number;
+  totalComments: number;
+  totalShares: number;
+}
 
 @Injectable({
   providedIn: 'root'
@@ -24,6 +32,12 @@ export class BlogService {
 
   public get goToPosts$() {
     return this.goToPosts;
+  }
+
+  public getPostStatistics(): Observable<PostStats> {
+    return this.http.get<PostStats>(`${environment.serverUrl}/posts/stats`).pipe(
+      catchError(this.handleError)
+    );
   }
 
   public getPostsPaginaged(pagination: { limit: number, offset: number, status?: 'all' | 'published' | 'draft' }): Observable<any> {
