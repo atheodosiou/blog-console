@@ -25,8 +25,27 @@ export class NavBarComponent implements OnInit {
     })
   }
 
+  onClick() {
+    if (this.showDashboard === true) {
+      this.showDashboard = !this.showDashboard;
+      this.onNewPostToggle.next(this.showDashboard);
+    } else {
+      this.alertService.confirmation(
+        "Leave page!", "All your work will be lost. This actions is not reversible!", "Leave", "Cancel").then(result => {
+          if (result.isConfirmed) {
+            this.showDashboard = !this.showDashboard;
+            this.onNewPostToggle.next(this.showDashboard);
+          } else {
+            return;
+          }
+        }).catch(error => { console.error(error) })
+    }
+
+  }
+
   signOut() {
     this.authService.logOut();
     this.alertService.success('Sign out was successfull.', '', 2000, true);
   }
+
 }

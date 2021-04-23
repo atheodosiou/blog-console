@@ -4,7 +4,7 @@
       <div class="card shadow-sm">
         <div class="card-body">
           <div class="d-flex flex-column align-items-center justify-content-start">
-            <h3 class="m-0 font-weight-bold">{{statistics.totalPublished}}</h3>
+            <h3 class="m-0 font-weight-bold">{{statistics?.totalPublished||0}}</h3>
             <p class="m-0 text-muted">Total published posts</p>
           </div>
         </div>
@@ -14,7 +14,7 @@
       <div class="card shadow-sm">
         <div class="card-body">
           <div class="d-flex flex-column align-items-center justify-content-start">
-            <h3 class="m-0 font-weight-bold">{{statistics.totalDraft}}</h3>
+            <h3 class="m-0 font-weight-bold">{{statistics?.totalDraft||0}}</h3>
             <p class="m-0 text-muted">Total draft posts</p>
           </div>
         </div>
@@ -24,7 +24,7 @@
       <div class="card shadow-sm">
         <div class="card-body">
           <div class="d-flex flex-column align-items-center justify-content-start">
-            <h3 class="m-0 font-weight-bold">{{statistics.totalViews}}</h3>
+            <h3 class="m-0 font-weight-bold">{{statistics?.totalViews||0}}</h3>
             <p class="m-0 text-muted">Total post views</p>
           </div>
         </div>
@@ -34,7 +34,7 @@
       <div class="card shadow-sm">
         <div class="card-body">
           <div class="d-flex flex-column align-items-center justify-content-start">
-            <h3 class="m-0 font-weight-bold">{{statistics.totalLikes}}</h3>
+            <h3 class="m-0 font-weight-bold">{{statistics?.totalLikes||0}}</h3>
             <p class="m-0 text-muted">Total post likes</p>
           </div>
         </div>
@@ -44,7 +44,7 @@
       <div class="card shadow-sm">
         <div class="card-body">
           <div class="d-flex flex-column align-items-center justify-content-start">
-            <h3 class="m-0 font-weight-bold">{{statistics.totalComments}}</h3>
+            <h3 class="m-0 font-weight-bold">{{statistics?.totalComments||0}}</h3>
             <p class="m-0 text-muted">Total post comments</p>
           </div>
         </div>
@@ -54,7 +54,7 @@
       <div class="card shadow-sm">
         <div class="card-body">
           <div class="d-flex flex-column align-items-center justify-content-start">
-            <h3 class="m-0 font-weight-bold">{{statistics.totalShares}}</h3>
+            <h3 class="m-0 font-weight-bold">{{statistics?.totalShares||0}}</h3>
             <p class="m-0 text-muted">Total post shares</p>
           </div>
         </div>

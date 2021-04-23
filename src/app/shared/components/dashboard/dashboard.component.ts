@@ -53,17 +53,22 @@ export class DashboardComponent implements OnInit {
   }
 
   deletePost(post: Post) {
-    this.blogService.deletePost(post._id).subscribe(res => {
-      const index = this.data.posts.indexOf(post)
-      if (index > -1) {
-        this.data.posts.splice(index, 1);
-        this.data.total -= 1;
-        this.alertService.success("Post deleted successfully.", "", 2000, true);
-      }
-    }, error => {
-      this.alertService.error("Faild to delete post.", "", 3000, true);
-      console.log(error);
-    });
+    this.alertService.confirmation(
+      "Delete post", "Do you want to delete this post? This actions is not reversible!", "Delete", "Cancel").then(result => {
+        if (result.isConfirmed) {
+          this.blogService.deletePost(post._id).subscribe(res => {
+            const index = this.data.posts.indexOf(post)
+            if (index > -1) {
+              this.data.posts.splice(index, 1);
+              this.data.total -= 1;
+              this.alertService.success("Post deleted successfully.", "", 2000, true);
+            }
+          }, error => {
+            this.alertService.error("Faild to delete post.", "", 3000, true);
+            console.log(error);
+          });
+        }
+      }).catch(error => { console.error(error) })
   }
 
   private getPosts(limit: number, offset: number, status: 'all' | 'published' | 'draft') {
